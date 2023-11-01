@@ -1,3 +1,5 @@
+import 'package:bls/chat/chat_screens/chat_home_screen.dart';
+import 'package:bls/chat/chat_screens/main_chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:bls/screens/top_bar_screens/search.dart';
 
@@ -11,8 +13,6 @@ class TopIconsBar extends StatefulWidget {
 }
 
 class _TopIconsBarState extends State<TopIconsBar> {
-  final int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -66,7 +66,8 @@ class _TopIconsBarState extends State<TopIconsBar> {
           icon: Icons.send,
           onPressed: () {
             setState(() {
-              // _selectedIndex = 2;
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (c) => const MainChatScreen()));
             });
           },
         ),

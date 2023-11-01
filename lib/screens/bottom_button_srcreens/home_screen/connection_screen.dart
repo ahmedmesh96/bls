@@ -76,7 +76,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final allDataFromDB = Provider.of<UserProvider>(context).getUser;
+    // final allDataFromDB = Provider.of<UserProvider>(context).getUser;
 
     return Container(
       height: screenHeight,
@@ -120,6 +120,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
                       child: Stack(
                         children: [
                           Positioned(
+                            top: -0.8,
                             left: indexScreen == 0
                                 ? 0
                                 : indexScreen == 1

@@ -256,7 +256,8 @@ class _AddPostState extends State<AddPost> {
                             ),
                           ),
                           Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 10),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               width: widthScreen * 0.15,
                               child: FittedBox(
                                   child: Text(allDataFromDB.username)))

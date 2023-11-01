@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bls/icon/my_flutter_app_icons.dart';
 
@@ -268,6 +269,30 @@ class _MenuScreenState extends State<MenuScreen> {
                   label: const Text(
                     "My Account",
                     style: TextStyle(fontSize: 25, color: Colors.white),
+                  )),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 10, left: 10),
+              alignment: Alignment.centerLeft,
+              width: screenWidth * 0.9,
+              decoration: BoxDecoration(
+                  color: Colors.white10,
+                  borderRadius: BorderRadius.circular(45)),
+              child: TextButton.icon(
+                  onPressed: () {
+                    setState(() async {
+                      await FirebaseAuth.instance.signOut();
+                    });
+                  },
+                  icon: const Icon(
+                    MyIcons.avatar,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  label: const Text(
+                    "Login Out",
+                    style: TextStyle(
+                        fontSize: 25, color: Color.fromARGB(255, 255, 4, 4)),
                   )),
             ),
           ],

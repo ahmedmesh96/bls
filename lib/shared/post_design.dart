@@ -207,6 +207,13 @@ class _PostDesignState extends State<PostDesign> {
                   ),
                 ),
           GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (c) =>
+                          ShowImage(imageUrl: widget.data["imgPost"])));
+            },
             onDoubleTap: () async {
               setState(() {
                 isLikeAnimating = true;
@@ -406,5 +413,49 @@ class _PostDesignState extends State<PostDesign> {
         ],
       ),
     );
+  }
+}
+
+class ShowImage extends StatelessWidget {
+  final String imageUrl;
+
+  const ShowImage({required this.imageUrl, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      body: Container(
+        height: size.height,
+        width: size.width,
+        // decoration: BoxDecoration(
+        //     image: DecorationImage(
+        //         image: NetworkImage(imageUrl),
+        //         fit: BoxFit.cover,
+        //         opacity: 0.4)),
+        // color: Colors.black,
+        child: Image.network(imageUrl),
+      ),
+    )
+
+        // Scaffold(
+        //   backgroundColor: Colors.transparent,
+        //   appBar: AppBar(
+        //     backgroundColor: Colors.transparent,
+        //   ),
+        //   body: Container(
+        //     height: size.height,
+        //     width: size.width,
+        //     color: Colors.black,
+        //     child: Image.network(imageUrl),
+        //   ),
+        // )
+
+        ;
   }
 }

@@ -32,6 +32,7 @@ class AuthMethods {
       //_________________________________________________________________________
 
       // firebase firestore (Database)
+      final time = DateTime.now().millisecondsSinceEpoch.toString();
       CollectionReference users =
           FirebaseFirestore.instance.collection('userSSS');
 
@@ -45,6 +46,11 @@ class AuthMethods {
         uid: credential.user!.uid,
         followers: [],
         following: [],
+        pushToken: "",
+        lastActive: time,
+        isOnline: false,
+        createdAt: time,
+        about: "Hey, I'm using BLS!",
       );
 
       users

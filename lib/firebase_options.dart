@@ -57,7 +57,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBrlO7SkKAnNWRT9XXe2uT_vyYNCu0TAp8',
-    appId: '1:804746209774:android:9a3cea397ba3767b0b86ff',
+    appId: '1:804746209774:android:5d9c9e897d1b98f40b86ff',
     messagingSenderId: '804746209774',
     projectId: 'blsa-e25b5',
     storageBucket: 'blsa-e25b5.appspot.com',
@@ -65,10 +65,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyD9pBqEXt8vCLoe0-XzSVCRkcyI5Zy1L_8',
-    appId: '1:804746209774:ios:46a32e7c9ff4143e0b86ff',
+    appId: '1:804746209774:ios:510413dc4d789f270b86ff',
     messagingSenderId: '804746209774',
     projectId: 'blsa-e25b5',
     storageBucket: 'blsa-e25b5.appspot.com',
+    androidClientId: '804746209774-ivk4n1qfg60cnejvs0j5fd4ha33ardpk.apps.googleusercontent.com',
+    iosClientId: '804746209774-86kg2h6ov0gm1po4uju735rlhhen0gks.apps.googleusercontent.com',
     iosBundleId: 'com.example.bls',
   );
 }
