@@ -1,5 +1,6 @@
 import 'package:bls/chat/chat_screens/chat_home_screen.dart';
 import 'package:bls/chat/chat_screens/old_chat_screen.dart';
+import 'package:bls/chat/group_chats/group_chat_screen.dart';
 import 'package:bls/provider/user_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -54,6 +55,10 @@ class _MainChatScreenState extends State<MainChatScreen> {
             ),
             body: Column(
               children: [
+                Divider(
+                  thickness: 1,
+                  color: Colors.white.withOpacity(0.7),
+                ),
                 Container(
                   width: screenWidth * 0.7,
                   height: screenHeight * 0.05,
@@ -99,7 +104,7 @@ class _MainChatScreenState extends State<MainChatScreen> {
                               ),
                             ),
                             child: const Text(
-                              'Old Chats',
+                              'Groups Chat',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
@@ -143,7 +148,7 @@ class _MainChatScreenState extends State<MainChatScreen> {
                 indexScreen == 0
                     ?
                     //* Old Chats  //////
-                    Expanded(child: OldChatScreen())
+                    const Expanded(child: GroupChatHomeScreen())
 
                     // Expanded(
                     //     child: ChatsPage(

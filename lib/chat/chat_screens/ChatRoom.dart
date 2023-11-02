@@ -143,6 +143,10 @@ class ChatRoom extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              Divider(
+                thickness: 1,
+                color: Colors.white.withOpacity(0.7),
+              ),
               SizedBox(
                 height: size.height * 0.75,
                 width: size.width,
@@ -180,16 +184,22 @@ class ChatRoom extends StatelessWidget {
                 width: size.width,
                 alignment: Alignment.center,
                 child: SizedBox(
-                  height: size.height / 12,
+                  height: size.height / 0.51,
                   width: size.width / 1.1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: size.height / 17,
+                        // height: size.height / 17,
                         width: size.width / 1.3,
                         child: TextField(
+                          keyboardType: TextInputType.multiline,
+                          expands: false,
+                          // cursorWidth: 12,
+                          minLines: 1,
+                          maxLines: 100,
                           controller: _message,
+                          textInputAction: TextInputAction.newline,
                           decoration: InputDecoration(
                               suffixIcon: IconButton(
                                 onPressed: () => getImage(
@@ -224,6 +234,7 @@ class ChatRoom extends StatelessWidget {
         ? SizedBox(
             child: map['sendby'] == _auth.currentUser!.uid
                 ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: map['sendby'] == _auth.currentUser!.uid
                         ? MainAxisAlignment.end
                         : MainAxisAlignment.start,
@@ -240,7 +251,10 @@ class ChatRoom extends StatelessWidget {
                             margin: const EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 8),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15)),
                               color: map['sendby'] == _auth.currentUser!.uid
                                   ? Colors.green
                                   : Colors.blue,
@@ -260,9 +274,12 @@ class ChatRoom extends StatelessWidget {
                           ),
                         ),
                       ),
-                      CircleAvatar(
-                        radius: 10,
-                        backgroundImage: NetworkImage(map!['profileImg']),
+                      Container(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: CircleAvatar(
+                          radius: 10,
+                          backgroundImage: NetworkImage(map!['profileImg']),
+                        ),
                       ),
                     ],
                   )
@@ -270,10 +287,14 @@ class ChatRoom extends StatelessWidget {
                     mainAxisAlignment: map['sendby'] == _auth.currentUser!.uid
                         ? MainAxisAlignment.end
                         : MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        radius: 10,
-                        backgroundImage: NetworkImage(map!['profileImg']),
+                      Container(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: CircleAvatar(
+                          radius: 10,
+                          backgroundImage: NetworkImage(map!['profileImg']),
+                        ),
                       ),
                       Expanded(
                         child: Container(
@@ -287,7 +308,10 @@ class ChatRoom extends StatelessWidget {
                             margin: const EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 8),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15)),
                               color: map['sendby'] == _auth.currentUser!.uid
                                   ? Colors.green
                                   : Colors.blue,
@@ -316,6 +340,7 @@ class ChatRoom extends StatelessWidget {
                     mainAxisAlignment: map['sendby'] == _auth.currentUser!.uid
                         ? MainAxisAlignment.end
                         : MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         height: size.height / 3.5,
@@ -336,21 +361,40 @@ class ChatRoom extends StatelessWidget {
                           child: Container(
                             height: size.height / 2.5,
                             width: size.width / 2,
-                            decoration: BoxDecoration(border: Border.all()),
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(22),
+                                    bottomLeft: Radius.circular(22),
+                                    bottomRight: Radius.circular(22)),
+                                border: Border.all()),
                             alignment:
                                 map['message'] != "" ? null : Alignment.center,
                             child: map['message'] != ""
-                                ? Image.network(
-                                    map['message'],
-                                    fit: BoxFit.cover,
-                                  )
+                                ? Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 20, left: 3, bottom: 3, right: 3),
+                                    height: size.height / 2,
+                                    decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
+                                            bottomRight: Radius.circular(20),
+                                            bottomLeft: Radius.circular(20),
+                                            topLeft: Radius.circular(20)),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                              map['message'],
+                                            ),
+                                            fit: BoxFit.cover)))
                                 : const CircularProgressIndicator(),
                           ),
                         ),
                       ),
-                      CircleAvatar(
-                        radius: 10,
-                        backgroundImage: NetworkImage(map!['profileImg']),
+                      Container(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: CircleAvatar(
+                          radius: 10,
+                          backgroundImage: NetworkImage(map!['profileImg']),
+                        ),
                       ),
                     ],
                   )
@@ -358,10 +402,14 @@ class ChatRoom extends StatelessWidget {
                     mainAxisAlignment: map['sendby'] == _auth.currentUser!.uid
                         ? MainAxisAlignment.end
                         : MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        radius: 10,
-                        backgroundImage: NetworkImage(map!['profileImg']),
+                      Container(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: CircleAvatar(
+                          radius: 10,
+                          backgroundImage: NetworkImage(map!['profileImg']),
+                        ),
                       ),
                       Container(
                         height: size.height / 3.5,
@@ -382,14 +430,30 @@ class ChatRoom extends StatelessWidget {
                           child: Container(
                             height: size.height / 2.5,
                             width: size.width / 2,
-                            decoration: BoxDecoration(border: Border.all()),
+                            decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(22),
+                                    bottomLeft: Radius.circular(22),
+                                    bottomRight: Radius.circular(22)),
+                                border: Border.all()),
                             alignment:
                                 map['message'] != "" ? null : Alignment.center,
                             child: map['message'] != ""
-                                ? Image.network(
-                                    map['message'],
-                                    fit: BoxFit.cover,
-                                  )
+                                ? Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 20, left: 3, bottom: 3, right: 3),
+                                    height: size.height / 2,
+                                    decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
+                                            bottomRight: Radius.circular(20),
+                                            bottomLeft: Radius.circular(20),
+                                            topRight: Radius.circular(20)),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                              map['message'],
+                                            ),
+                                            fit: BoxFit.cover)))
                                 : const CircularProgressIndicator(),
                           ),
                         ),

@@ -19,8 +19,8 @@ class _GroupInfoState extends State<GroupInfo> {
   List membersList = [];
   bool isLoading = true;
 
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _GroupInfoState extends State<GroupInfo> {
   }
 
   Future getGroupDetails() async {
-    await _firestore
+    await firestore
         .collection('groups')
         .doc(widget.groupId)
         .get()
@@ -46,7 +46,7 @@ class _GroupInfoState extends State<GroupInfo> {
     bool isAdmin = false;
 
     membersList.forEach((element) {
-      if (element['uid'] == _auth.currentUser!.uid) {
+      if (element['uid'] == auth.currentUser!.uid) {
         isAdmin = element['isAdmin'];
       }
     });
@@ -61,10 +61,10 @@ class _GroupInfoState extends State<GroupInfo> {
       membersList.removeAt(index);
     });
 
-    await _firestore.collection('groups').doc(widget.groupId).update({
+    await firestore.collection('groups').doc(widget.groupId).update({
       "members": membersList,
     }).then((value) async {
-      await _firestore
+      await firestore
           .collection('userSSS')
           .doc(uid)
           .collection('groups')
@@ -79,7 +79,7 @@ class _GroupInfoState extends State<GroupInfo> {
 
   void showDialogBox(int index) {
     if (checkAdmin()) {
-      if (_auth.currentUser!.uid != membersList[index]['uid']) {
+      if (auth.currentUser!.uid != membersList[index]['uid']) {
         showDialog(
             context: context,
             builder: (context) {
@@ -102,29 +102,38 @@ class _GroupInfoState extends State<GroupInfo> {
       });
 
       for (int i = 0; i < membersList.length; i++) {
-        if (membersList[i]['uid'] == _auth.currentUser!.uid) {
+        if (membersList[i]['uid'] == auth.currentUser!.uid) {
           membersList.removeAt(i);
         }
       }
 
-      await _firestore.collection('groups').doc(widget.groupId).update({
+      await firestore.collection('groups').doc(widget.groupId).update({
         "members": membersList,
       });
 
-      await _firestore
+      await firestore
           .collection('userSSS')
-          .doc(_auth.currentUser!.uid)
+          .doc(auth.currentUser!.uid)
           .collection('groups')
           .doc(widget.groupId)
-          .delete();
+          .delete()
+          .whenComplete(() {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (_) => ChatHomeScreen(
+                  // allMyDataFromDB: allMyDataFromDB,
+                  )),
+          (route) => false,
+        );
+      });
 
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (_) => ChatHomeScreen(
-                // allMyDataFromDB: allMyDataFromDB,
-                )),
-        (route) => false,
-      );
+      // Navigator.of(context).pushAndRemoveUntil(
+      //   MaterialPageRoute(
+      //       builder: (_) => ChatHomeScreen(
+      //           // allMyDataFromDB: allMyDataFromDB,
+      //           )),
+      //   (route) => false,
+      // );
     }
   }
 
@@ -133,148 +142,181 @@ class _GroupInfoState extends State<GroupInfo> {
     final Size size = MediaQuery.of(context).size;
 
     return SafeArea(
-      child: Scaffold(
-        body: isLoading
-            ? Container(
-                height: size.height,
-                width: size.width,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
-              )
-            : SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: BackButton(),
-                    ),
-                    SizedBox(
-                      height: size.height / 8,
-                      width: size.width / 1.1,
-                      child: Row(
-                        children: [
-                          Container(
-                            height: size.height / 11,
-                            width: size.height / 11,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey,
+      child: Container(
+        height: size.height,
+        width: size.width,
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(colors: [
+            Color.fromARGB(255, 38, 43, 116),
+            Color.fromARGB(255, 14, 15, 34)
+          ], radius: 0.7),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: isLoading
+              ? Container(
+                  height: size.height,
+                  width: size.width,
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
+                )
+              : SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: BackButton(),
+                      ),
+                      SizedBox(
+                        height: size.height / 8,
+                        width: size.width / 1.1,
+                        child: Row(
+                          children: [
+                            Container(
+                              height: size.height / 11,
+                              width: size.height / 11,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey,
+                              ),
+                              child: Icon(
+                                Icons.group,
+                                color: Colors.white,
+                                size: size.width / 10,
+                              ),
                             ),
-                            child: Icon(
-                              Icons.group,
-                              color: Colors.white,
-                              size: size.width / 10,
+                            SizedBox(
+                              width: size.width / 20,
                             ),
+                            Expanded(
+                              child: SizedBox(
+                                child: Text(
+                                  widget.groupName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: size.width / 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Divider(
+                        thickness: 1,
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+
+                      //
+
+                      // SizedBox(
+                      //   height: size.height / 20,
+                      // ),
+
+                      SizedBox(
+                        width: size.width / 1.1,
+                        child: Text(
+                          "${membersList.length} Members",
+                          style: TextStyle(
+                            fontSize: size.width / 20,
+                            fontWeight: FontWeight.w500,
                           ),
-                          SizedBox(
-                            width: size.width / 20,
-                          ),
-                          Expanded(
-                            child: SizedBox(
-                              child: Text(
-                                widget.groupName,
-                                overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: size.height / 20,
+                      ),
+
+                      // Members Name
+
+                      checkAdmin()
+                          ? ListTile(
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => AddMembersINGroup(
+                                    groupChatId: widget.groupId,
+                                    name: widget.groupName,
+                                    membersList: membersList,
+                                  ),
+                                ),
+                              ),
+                              leading: const Icon(
+                                Icons.add,
+                              ),
+                              title: Text(
+                                "Add Members",
                                 style: TextStyle(
-                                  fontSize: size.width / 16,
+                                  fontSize: size.width / 22,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                            )
+                          : const SizedBox(),
 
-                    //
-
-                    SizedBox(
-                      height: size.height / 20,
-                    ),
-
-                    SizedBox(
-                      width: size.width / 1.1,
-                      child: Text(
-                        "${membersList.length} Members",
-                        style: TextStyle(
-                          fontSize: size.width / 20,
-                          fontWeight: FontWeight.w500,
+                      Flexible(
+                        child: ListView.builder(
+                          itemCount: membersList.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: const EdgeInsets.only(top: 5),
+                              decoration: BoxDecoration(
+                                // color: mobileBackgroundColor,
+                                gradient: const LinearGradient(colors: [
+                                  Color.fromARGB(255, 14, 15, 34),
+                                  Color.fromARGB(255, 38, 43, 116),
+                                ]),
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(color: Colors.white),
+                              ),
+                              child: ListTile(
+                                onTap: () => showDialogBox(index),
+                                leading: const Icon(Icons.account_circle),
+                                title: Text(
+                                  membersList[index]['name'],
+                                  style: TextStyle(
+                                    fontSize: size.width / 22,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                subtitle: Text(membersList[index]['email']),
+                                trailing: Text(membersList[index]['isAdmin']
+                                    ? "Admin"
+                                    : ""),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                    ),
-
-                    SizedBox(
-                      height: size.height / 20,
-                    ),
-
-                    // Members Name
-
-                    checkAdmin()
-                        ? ListTile(
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => AddMembersINGroup(
-                                  groupChatId: widget.groupId,
-                                  name: widget.groupName,
-                                  membersList: membersList,
-                                ),
-                              ),
-                            ),
-                            leading: const Icon(
-                              Icons.add,
-                            ),
-                            title: Text(
-                              "Add Members",
-                              style: TextStyle(
-                                fontSize: size.width / 22,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          )
-                        : const SizedBox(),
-
-                    Flexible(
-                      child: ListView.builder(
-                        itemCount: membersList.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () => showDialogBox(index),
-                            leading: const Icon(Icons.account_circle),
-                            title: Text(
-                              membersList[index]['name'],
-                              style: TextStyle(
-                                fontSize: size.width / 22,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            subtitle: Text(membersList[index]['email']),
-                            trailing: Text(
-                                membersList[index]['isAdmin'] ? "Admin" : ""),
-                          );
-                        },
+                      Divider(
+                        thickness: 1,
+                        color: Colors.white.withOpacity(0.5),
                       ),
-                    ),
 
-                    ListTile(
-                      onTap: onLeaveGroup,
-                      leading: const Icon(
-                        Icons.logout,
-                        color: Colors.redAccent,
-                      ),
-                      title: Text(
-                        "Leave Group",
-                        style: TextStyle(
-                          fontSize: size.width / 22,
-                          fontWeight: FontWeight.w500,
+                      ListTile(
+                        onTap: onLeaveGroup,
+                        leading: const Icon(
+                          Icons.logout,
                           color: Colors.redAccent,
                         ),
+                        title: Text(
+                          "Leave Group",
+                          style: TextStyle(
+                            fontSize: size.width / 22,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.redAccent,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }
